@@ -41,20 +41,24 @@ export class DioParser {
     /**
      * パース処理の実行
      *
-     * @param fileUrl - DrawIoファイルのパス
+     * @param contentsUrl - DrawIoファイル、ポリゴンファイルのパス
      */
-    parse(fileUrl) {
+    parse(contentsUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             // 読み込みを行う
-            const res = yield fetch(fileUrl);
+            const dioResult = yield fetch(contentsUrl.dioFile);
             // テキスト形式（XML）で取得する
-            const data = yield res.text();
+            const dioData = yield dioResult.text();
+            // ポリゴンの読み込みを行う
+            const polygonResult = yield fetch(contentsUrl.polygonFile);
+            // JSON形式で取得する
+            const polygonData = yield polygonResult.json();
             // 結果をパースする
             let result = [];
             try {
                 // XMLでパースを実施
                 const parser = new XMLParser({ ignoreAttributes: false });
-                const parsed = parser.parse(data);
+                const parsed = parser.parse(dioData);
                 // ファイルからrootオブジェクトを取得する
                 const graphModel = parsed.mxfile.diagram.mxGraphModel.root;
                 // 全オブジェクトをパース処理する
@@ -66,7 +70,10 @@ export class DioParser {
                 console.log(e);
                 console.log('Parse Error');
             }
-            return result;
+            return {
+                data: result,
+                polygon: polygonData,
+            };
         });
     }
 }

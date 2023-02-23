@@ -1,6 +1,41 @@
 import { XMLParser } from 'fast-xml-parser';
 import { DioData } from './dio-data';
 
+/** Dioファイルの初期化要求データ */
+interface DioParserParameter {
+  // DioファイルのURL
+  dioFile: string;
+  // ポリゴンファイルのURL
+  polygonFile: string;
+}
+
+/** Dioファイルの解析結果 */
+export interface DioParseResult {
+  // Dioのそれぞれのデータ
+  data: DioData[];
+  // ポリゴンのそれぞれのデータ
+  polygon: PolygonDataType;
+}
+
+/** ポリゴン1つが含むデータの詳細 */
+interface PolygonDataContentType {
+  // ポリゴンの表示倍率
+  scale: number;
+  // Y方向の配置ポジション
+  y: number;
+  // 回転角度（degree）
+  rotate: number;
+  // GLBファイルのコンテンツデータ（Base64）
+  // 大量のデータをロードすると時間がかかるため、バンドルして配信する
+  glb: string;
+}
+
+/** ポリゴンファイルのデータ */
+export interface PolygonDataType {
+  // ファイルキーとファイル実体の辞書
+  [key: string]: PolygonDataContentType;
+}
+
 /**
  * DrawIoからデータをパースする
  */
@@ -35,19 +70,23 @@ export class DioParser {
   /**
    * パース処理の実行
    *
-   * @param fileUrl - DrawIoファイルのパス
+   * @param contentsUrl - DrawIoファイル、ポリゴンファイルのパス
    */
-  async parse(fileUrl: string) {
+  async parse(contentsUrl: DioParserParameter): Promise<DioParseResult> {
     // 読み込みを行う
-    const res = await fetch(fileUrl);
+    const dioResult = await fetch(contentsUrl.dioFile);
     // テキスト形式（XML）で取得する
-    const data = await res.text();
+    const dioData = await dioResult.text();
+    // ポリゴンの読み込みを行う
+    const polygonResult = await fetch(contentsUrl.polygonFile);
+    // JSON形式で取得する
+    const polygonData: PolygonDataType = await polygonResult.json();
     // 結果をパースする
     let result: Array<DioData> = [];
     try {
       // XMLでパースを実施
       const parser = new XMLParser({ ignoreAttributes: false });
-      const parsed = parser.parse(data);
+      const parsed = parser.parse(dioData);
       // ファイルからrootオブジェクトを取得する
       const graphModel = parsed.mxfile.diagram.mxGraphModel.root;
       // 全オブジェクトをパース処理する
@@ -58,6 +97,9 @@ export class DioParser {
       console.log(e);
       console.log('Parse Error');
     }
-    return result;
+    return {
+      data: result,
+      polygon: polygonData,
+    };
   }
 }

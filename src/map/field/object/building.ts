@@ -4,7 +4,7 @@ import { Color } from '../../util/color';
 import { FieldObjectBase } from './field-object-base';
 import type { DioData } from '../../../map/parser/dio-data';
 import { LabelPlate } from './label-plate';
-import * as THREE from "three";
+import type * as THREE from 'three';
 
 const BUILDING_HEIGHT = 0.05;
 

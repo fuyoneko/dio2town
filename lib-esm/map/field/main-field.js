@@ -136,20 +136,20 @@ export class MainField {
         });
     }
     /** Dioをもとに、データを初期化する */
-    basement(scene, dataList, progress) {
+    basement(scene, dioData, progress) {
         // 床の情報を取得する
         let floorPositionMin = new GeoPoint(0, 0);
         let floorPositionMax = new GeoPoint(1, 1);
-        dataList.forEach(data => {
+        dioData.data.forEach(data => {
             if (data.type == 'floor') {
                 floorPositionMin = new GeoPoint(data.x[0], data.y[0]);
                 floorPositionMax = new GeoPoint(data.x[1], data.y[1]);
             }
         });
         // 各オブジェクトを作成する
-        this._fieldObjectList = dataList.map((data, index) => {
+        this._fieldObjectList = dioData.data.map((data, index) => {
             // 進捗状態を報告する
-            progress(index, dataList.length);
+            progress(index, dioData.data.length);
             // オブジェクトを作成する
             let result = new FieldObjectBase();
             // オブジェクト：高速道路を作成する
@@ -207,7 +207,7 @@ export class MainField {
             }
             // オブジェクト：低い建物を作成する
             if (data.type == 'place' || data.type == 'y-place') {
-                result = new FieldPlace(scene, data);
+                result = new FieldPlace(scene, data, dioData.polygon);
             }
             // オブジェクト：高い建物を作成する
             if (data.type == 'x-building' || data.type == 'y-building') {

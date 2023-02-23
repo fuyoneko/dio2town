@@ -7,10 +7,10 @@ import { FieldObjectBase } from './field-object-base';
 import { SpritePanel } from './sprite-panel';
 import type { DioData } from '../../../map/parser/dio-data';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// import * as polygon from '../../../polygon/polygon.json';
 import { FieldPlaceBuildingObject } from './field-place-build-object';
 import { GeoRectangle } from './geo-rectangle';
 import { LabelPlate } from './label-plate';
+import type { PolygonDataType } from '../../../map/parser/dio-parser';
 
 /** 平面のマップ部品を描画する */
 export class FieldPlace extends FieldObjectBase {
@@ -22,7 +22,7 @@ export class FieldPlace extends FieldObjectBase {
   _objectSpace: GeoRectangle;
 
   /** コンストラクタ */
-  constructor(scene: THREE.Scene, data: DioData) {
+  constructor(scene: THREE.Scene, data: DioData, polygon: PolygonDataType) {
     super();
     // 建物情報を登録する
     this._buildingObject = new FieldPlaceBuildingObject();
@@ -73,14 +73,12 @@ export class FieldPlace extends FieldObjectBase {
       );
 
       // Lazy Load用の簡単なビルディングを取得する
-      /*
       if (data.lod2.length >= 1 && data.lod2 in polygon) {
-        this._buildingObject = this.createBuildingObject(scene, data);
+        this._buildingObject = this.createBuildingObject(scene, data, polygon);
         this._buildingObject.accessToLazyLoadBuilding((_, sprite) => {
           this.addBoundingBox(sprite);
         });
       }
-      */
     }
 
     if (data.image) {
@@ -132,7 +130,11 @@ export class FieldPlace extends FieldObjectBase {
   }
 
   /** ピッチが下がった時に表示する詳細ビュー（オブジェクト）を設定する */
-  createBuildingObject(scene: THREE.Scene, data: DioData) {
+  createBuildingObject(
+    scene: THREE.Scene,
+    data: DioData,
+    polygon: PolygonDataType
+  ) {
     // 中心座標を取得する
     const mx = (data.x[0] + data.x[1]) / 2;
     const my = (data.y[0] + data.y[1]) / 2;
@@ -156,7 +158,6 @@ export class FieldPlace extends FieldObjectBase {
       building,
       sprite
     );
-    /*
     // GLBデータからオブジェクトを取得する
     const loader = new GLTFLoader();
     loader.parse(
@@ -173,7 +174,6 @@ export class FieldPlace extends FieldObjectBase {
         );
       }
     );
-    */
     return result;
   }
 

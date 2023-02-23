@@ -5,14 +5,14 @@ import { LabelTexture } from './label-texture';
 import { Color } from '../../util/color';
 import { FieldObjectBase } from './field-object-base';
 import { SpritePanel } from './sprite-panel';
-// import * as polygon from '../../../polygon/polygon.json';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FieldPlaceBuildingObject } from './field-place-build-object';
 import { GeoRectangle } from './geo-rectangle';
 import { LabelPlate } from './label-plate';
 /** 平面のマップ部品を描画する */
 export class FieldPlace extends FieldObjectBase {
     /** コンストラクタ */
-    constructor(scene, data) {
+    constructor(scene, data, polygon) {
         super();
         // 建物情報を登録する
         this._buildingObject = new FieldPlaceBuildingObject();
@@ -43,14 +43,12 @@ export class FieldPlace extends FieldObjectBase {
             // ホバー中のホバー表示を設定する
             this.initHover(scene, new GeoPoint(data.x[0], data.y[0]), new GeoPoint(data.x[1], data.y[1]), 0.01 + 0.003);
             // Lazy Load用の簡単なビルディングを取得する
-            /*
             if (data.lod2.length >= 1 && data.lod2 in polygon) {
-              this._buildingObject = this.createBuildingObject(scene, data);
-              this._buildingObject.accessToLazyLoadBuilding((_, sprite) => {
-                this.addBoundingBox(sprite);
-              });
+                this._buildingObject = this.createBuildingObject(scene, data, polygon);
+                this._buildingObject.accessToLazyLoadBuilding((_, sprite) => {
+                    this.addBoundingBox(sprite);
+                });
             }
-            */
         }
         if (data.image) {
             const panel = new SpritePanel(scene, data.image);
@@ -95,7 +93,7 @@ export class FieldPlace extends FieldObjectBase {
         return sprite;
     }
     /** ピッチが下がった時に表示する詳細ビュー（オブジェクト）を設定する */
-    createBuildingObject(scene, data) {
+    createBuildingObject(scene, data, polygon) {
         // 中心座標を取得する
         const mx = (data.x[0] + data.x[1]) / 2;
         const my = (data.y[0] + data.y[1]) / 2;
@@ -110,24 +108,12 @@ export class FieldPlace extends FieldObjectBase {
         sprite.visible = false;
         // オブジェクトを返す
         const result = new FieldPlaceBuildingObject().withContents(building, sprite);
-        /*
         // GLBデータからオブジェクトを取得する
         const loader = new GLTFLoader();
-        loader.parse(
-          result.base64ToArrayBuffer(polygon[data.lod2].glb),
-          '/',
-          gltf => {
+        loader.parse(result.base64ToArrayBuffer(polygon[data.lod2].glb), '/', gltf => {
             // 四角形のオブジェクトと入れ替える
-            result.replaceLazyLoadBuilding(
-              scene,
-              gltf.scene,
-              polygon[data.lod2].scale,
-              polygon[data.lod2].rotate,
-              polygon[data.lod2].y
-            );
-          }
-        );
-        */
+            result.replaceLazyLoadBuilding(scene, gltf.scene, polygon[data.lod2].scale, polygon[data.lod2].rotate, polygon[data.lod2].y);
+        });
         return result;
     }
     /** ピッチの状態に応じて、詳細ビューの表示状態を更新する */

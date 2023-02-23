@@ -1,6 +1,6 @@
 import { FieldObjectBase } from './field-object-base';
 import type { DioData } from '../../../map/parser/dio-data';
-import * as THREE from "three";
+import type * as THREE from 'three';
 /**
  * 立体の建物を作成する
  * type : building

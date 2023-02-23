@@ -6,7 +6,7 @@ import {
   TOUCH,
   Vector2,
   Vector3,
-} from "three";
+} from 'three';
 
 // This set of controls performs orbiting, dollying (zooming), and panning.
 // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
@@ -15,9 +15,9 @@ import {
 //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
 //    Pan - right mouse, or left mouse + ctrl/meta/shiftKey, or arrow keys / touch: two-finger move
 
-const _changeEvent = { type: "change" };
-const _startEvent = { type: "start" };
-const _endEvent = { type: "end" };
+const _changeEvent = { type: 'change' };
+const _startEvent = { type: 'start' };
+const _endEvent = { type: 'end' };
 
 class MapOrbitControls extends EventDispatcher {
   constructor(object, domElement) {
@@ -34,7 +34,7 @@ class MapOrbitControls extends EventDispatcher {
 
     this.object = object;
     this.domElement = domElement;
-    this.domElement.style.touchAction = "none"; // disable touch scroll
+    this.domElement.style.touchAction = 'none'; // disable touch scroll
 
     // Set to false to disable this control
     this.enabled = true;
@@ -87,10 +87,10 @@ class MapOrbitControls extends EventDispatcher {
 
     // The four arrow keys
     this.keys = {
-      LEFT: "ArrowLeft",
-      UP: "ArrowUp",
-      RIGHT: "ArrowRight",
-      BOTTOM: "ArrowDown",
+      LEFT: 'ArrowLeft',
+      UP: 'ArrowUp',
+      RIGHT: 'ArrowRight',
+      BOTTOM: 'ArrowDown',
     };
 
     // Mouse buttons
@@ -128,7 +128,7 @@ class MapOrbitControls extends EventDispatcher {
     };
 
     this.listenToKeyEvents = function (domElement) {
-      domElement.addEventListener("keydown", onKeyDown);
+      domElement.addEventListener('keydown', onKeyDown);
       this._domElementKeyEvents = domElement;
     };
 
@@ -281,17 +281,17 @@ class MapOrbitControls extends EventDispatcher {
     })();
 
     this.dispose = function () {
-      scope.domElement.removeEventListener("contextmenu", onContextMenu);
+      scope.domElement.removeEventListener('contextmenu', onContextMenu);
 
-      scope.domElement.removeEventListener("pointerdown", onPointerDown);
-      scope.domElement.removeEventListener("pointercancel", onPointerCancel);
-      scope.domElement.removeEventListener("wheel", onMouseWheel);
+      scope.domElement.removeEventListener('pointerdown', onPointerDown);
+      scope.domElement.removeEventListener('pointercancel', onPointerCancel);
+      scope.domElement.removeEventListener('wheel', onMouseWheel);
 
-      scope.domElement.removeEventListener("pointermove", onPointerMove);
-      scope.domElement.removeEventListener("pointerup", onPointerUp);
+      scope.domElement.removeEventListener('pointermove', onPointerMove);
+      scope.domElement.removeEventListener('pointerup', onPointerUp);
 
       if (scope._domElementKeyEvents !== null) {
-        scope._domElementKeyEvents.removeEventListener("keydown", onKeyDown);
+        scope._domElementKeyEvents.removeEventListener('keydown', onKeyDown);
       }
 
       // scope.dispatchEvent( { type: 'dispose' } ); // should this be added here?
@@ -432,7 +432,7 @@ class MapOrbitControls extends EventDispatcher {
         } else {
           // camera neither orthographic nor perspective
           console.warn(
-            "WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."
+            'WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.'
           );
           scope.enablePan = false;
         }
@@ -451,7 +451,7 @@ class MapOrbitControls extends EventDispatcher {
         zoomChanged = true;
       } else {
         console.warn(
-          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
+          'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.'
         );
         scope.enableZoom = false;
       }
@@ -469,7 +469,7 @@ class MapOrbitControls extends EventDispatcher {
         zoomChanged = true;
       } else {
         console.warn(
-          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
+          'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.'
         );
         scope.enableZoom = false;
       }
@@ -738,15 +738,15 @@ class MapOrbitControls extends EventDispatcher {
       if (pointers.length === 0) {
         scope.domElement.setPointerCapture(event.pointerId);
 
-        scope.domElement.addEventListener("pointermove", onPointerMove);
-        scope.domElement.addEventListener("pointerup", onPointerUp);
+        scope.domElement.addEventListener('pointermove', onPointerMove);
+        scope.domElement.addEventListener('pointerup', onPointerUp);
       }
 
       //
 
       addPointer(event);
 
-      if (event.pointerType === "touch") {
+      if (event.pointerType === 'touch') {
         onTouchStart(event);
       } else {
         onMouseDown(event);
@@ -756,7 +756,7 @@ class MapOrbitControls extends EventDispatcher {
     function onPointerMove(event) {
       if (scope.enabled === false) return;
 
-      if (event.pointerType === "touch") {
+      if (event.pointerType === 'touch') {
         onTouchMove(event);
       } else {
         onMouseMove(event);
@@ -769,8 +769,8 @@ class MapOrbitControls extends EventDispatcher {
       if (pointers.length === 0) {
         scope.domElement.releasePointerCapture(event.pointerId);
 
-        scope.domElement.removeEventListener("pointermove", onPointerMove);
-        scope.domElement.removeEventListener("pointerup", onPointerUp);
+        scope.domElement.removeEventListener('pointermove', onPointerMove);
+        scope.domElement.removeEventListener('pointerup', onPointerUp);
       }
 
       scope.dispatchEvent(_endEvent);
@@ -1059,11 +1059,11 @@ class MapOrbitControls extends EventDispatcher {
 
     //
 
-    scope.domElement.addEventListener("contextmenu", onContextMenu);
+    scope.domElement.addEventListener('contextmenu', onContextMenu);
 
-    scope.domElement.addEventListener("pointerdown", onPointerDown);
-    scope.domElement.addEventListener("pointercancel", onPointerCancel);
-    scope.domElement.addEventListener("wheel", onMouseWheel, {
+    scope.domElement.addEventListener('pointerdown', onPointerDown);
+    scope.domElement.addEventListener('pointercancel', onPointerCancel);
+    scope.domElement.addEventListener('wheel', onMouseWheel, {
       passive: false,
     });
 

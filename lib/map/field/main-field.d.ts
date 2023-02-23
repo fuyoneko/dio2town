@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { FieldObjectBase } from './object/field-object-base';
 import { Vector3 } from 'three';
-import type { DioData } from '../parser/dio-data';
+import type { DioParseResult } from '../parser/dio-parser';
 /**
  * Comment
  */
@@ -38,5 +38,5 @@ export declare class MainField {
     /** カメラの状態が更新された */
     didUpdateCameraStatus(polarAngle: number, azimuthalAngle: number, distance: number, cameraPosition: Vector3): void;
     /** Dioをもとに、データを初期化する */
-    basement(scene: THREE.Scene, dataList: Array<DioData>, progress: (started: number, count: number) => void): void;
+    basement(scene: THREE.Scene, dioData: DioParseResult, progress: (started: number, count: number) => void): void;
 }

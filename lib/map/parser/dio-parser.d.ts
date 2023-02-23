@@ -1,4 +1,25 @@
 import { DioData } from './dio-data';
+/** Dioファイルの初期化要求データ */
+interface DioParserParameter {
+    dioFile: string;
+    polygonFile: string;
+}
+/** Dioファイルの解析結果 */
+export interface DioParseResult {
+    data: DioData[];
+    polygon: PolygonDataType;
+}
+/** ポリゴン1つが含むデータの詳細 */
+interface PolygonDataContentType {
+    scale: number;
+    y: number;
+    rotate: number;
+    glb: string;
+}
+/** ポリゴンファイルのデータ */
+export interface PolygonDataType {
+    [key: string]: PolygonDataContentType;
+}
 /**
  * DrawIoからデータをパースする
  */
@@ -17,7 +38,8 @@ export declare class DioParser {
     /**
      * パース処理の実行
      *
-     * @param fileUrl - DrawIoファイルのパス
+     * @param contentsUrl - DrawIoファイル、ポリゴンファイルのパス
      */
-    parse(fileUrl: string): Promise<DioData[]>;
+    parse(contentsUrl: DioParserParameter): Promise<DioParseResult>;
 }
+export {};
