@@ -1,0 +1,24 @@
+{
+  "name": "dio-2-town-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": "",
+  "author": "Fuyoneko",
+  "license": "MIT",
+  "scripts": {
+    "clean": "shx rm -rf _bundles lib lib-esm",
+    "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack"
+  },
+  "dependencies": {
+    "three": "^0.139.2",
+    "fast-xml-parser": "^4.0.11",
+    "ts-loader": "^9.4.2",
+    "shx": "^0.2.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.75.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.0.1"
+  }
+}
